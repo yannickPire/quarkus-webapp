@@ -63,8 +63,8 @@ public class Film {
     @Column(name = "rating", columnDefinition = "enum('G','PG','PG-13','R','NC-17')")
     private Rating rating;
 
-    @Column(name = "special_features", nullable = false, columnDefinition = "enum('Trailers', 'Commentaries', 'Deleted Scenes', 'Behind the Scenes'")
-    private Set<String> specialFeatures;
+    @Column(name = "special_features", nullable = false, columnDefinition = "set('Trailers', 'Commentaries', 'Deleted Scenes', 'Behind the Scenes'")
+    private String specialFeatures;
 
     @Column(name = "last_update", nullable = false)
     private Timestamp lastUpdate;
@@ -165,11 +165,11 @@ public class Film {
         this.rating = rating;
     }
 
-    public Set<String> getSpecialFeatures() {
+    public String getSpecialFeatures() {
         return specialFeatures;
     }
 
-    public void setSpecialFeatures(Set<String> specialFeatures) {
+    public void setSpecialFeatures(String specialFeatures) {
         this.specialFeatures = specialFeatures;
     }
 
