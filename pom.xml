@@ -85,6 +85,8 @@
                 <configuration>
                     <compilerArgs>
                         <arg>-parameters</arg>
+<!--                        I want to generate the JPA Streamer metamodel into a seperate package inside the model-->
+                        <arg>-AjpaStreamerPackage=be.quarkus.webapp.model.metamodel</arg>
                     </compilerArgs>
                 </configuration>
             </plugin>
