@@ -1,87 +1,75 @@
 package be.quarkus.webapp.model;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+import java.util.Objects;
 
 @Entity
 @Table(name = "film", schema = "sakila")
 public class Film {
 
-    @Id
+    public Film() {}
+
+    public Film(short filmId, String title, short length) {
+        this.filmId = filmId;
+        this.title = title;
+        this.length = length;
+    }
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     @Column(name = "film_id")
-    private Short filmId;
-
-    @Column(name = "title", nullable = false)
+    private short filmId;
+    @Basic
+    @Column(name = "title")
     private String title;
-
-    @Column(name = "description", columnDefinition = "text")
+    @Basic
+    @Column(name = "description")
     private String description;
-
-    @Column(name = "release_year")
-    private Short releaseYear;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "language_id", nullable = false)
-    private Language language;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "original_language_id")
-    private Language originalLanguage;
-
-    @Column(name = "rental_duration", nullable = false)
-    private Short rentalDuration;
-
-    @Column(name = "rental_rate", nullable = false)
-    private BigDecimal rentalRate;
-
+    @Basic
+    @Column(name = "language_id")
+    private short languageId;
+    @Basic
+    @Column(name = "original_language_id")
+    private Short originalLanguageId;
+    @Basic
+    @Column(name = "rental_duration")
+    private short rentalDuration;
+    @Basic
+    @Column(name = "rental_rate", columnDefinition = "decimal(4,2)")
+    private Float rentalRate;
+    @Basic
     @Column(name = "length")
     private Short length;
-
-    @Column(name = "replacement_cost", nullable = false)
+    @Basic
+    @Column(name = "replacement_cost")
     private BigDecimal replacementCost;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "rating", columnDefinition = "enum('G','PG','PG-13','R','NC-17')")
-    private Rating rating;
-
-    @Column(name = "special_features", nullable = false, columnDefinition = "set('Trailers', 'Commentaries', 'Deleted Scenes', 'Behind the Scenes'")
+    @Basic
+    @Column(name = "rating", columnDefinition = "enum('G', 'PG', 'PG-13', 'R', 'NC-17')")
+    private String rating;
+    @Basic
+    @Column(name = "special_features", columnDefinition = "set('Trailers', 'Commentaries', 'Deleted Scenes', 'Behind the Scenes')")
     private String specialFeatures;
-
-    @Column(name = "last_update", nullable = false)
+    @Basic
+    @Column(name = "last_update")
     private Timestamp lastUpdate;
-
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinTable(
             name = "film_actor",
-            joinColumns = {@JoinColumn(name = "film_id")},
-            inverseJoinColumns = {@JoinColumn(name = "actor_id")}
+            joinColumns = { @JoinColumn(name = "film_id") },
+            inverseJoinColumns = { @JoinColumn(name = "actor_id") }
     )
     private List<Actor> actors = new ArrayList<>();
 
-    public Short getFilmId() {
+    public short getFilmId() {
         return filmId;
     }
 
-    public void setFilmId(Short filmId) {
+    public void setFilmId(short filmId) {
         this.filmId = filmId;
     }
 
@@ -101,43 +89,35 @@ public class Film {
         this.description = description;
     }
 
-    public Short getReleaseYear() {
-        return releaseYear;
+    public short getLanguageId() {
+        return languageId;
     }
 
-    public void setReleaseYear(Short releaseYear) {
-        this.releaseYear = releaseYear;
+    public void setLanguageId(short languageId) {
+        this.languageId = languageId;
     }
 
-    public Language getLanguage() {
-        return language;
+    public Short getOriginalLanguageId() {
+        return originalLanguageId;
     }
 
-    public void setLanguage(Language language) {
-        this.language = language;
+    public void setOriginalLanguageId(Short originalLanguageId) {
+        this.originalLanguageId = originalLanguageId;
     }
 
-    public Language getOriginalLanguage() {
-        return originalLanguage;
-    }
-
-    public void setOriginalLanguage(Language originalLanguage) {
-        this.originalLanguage = originalLanguage;
-    }
-
-    public Short getRentalDuration() {
+    public short getRentalDuration() {
         return rentalDuration;
     }
 
-    public void setRentalDuration(Short rentalDuration) {
+    public void setRentalDuration(short rentalDuration) {
         this.rentalDuration = rentalDuration;
     }
 
-    public BigDecimal getRentalRate() {
+    public Float getRentalRate() {
         return rentalRate;
     }
 
-    public void setRentalRate(BigDecimal rentalRate) {
+    public void setRentalRate(Float rentalRate) {
         this.rentalRate = rentalRate;
     }
 
@@ -157,11 +137,11 @@ public class Film {
         this.replacementCost = replacementCost;
     }
 
-    public Rating getRating() {
+    public String getRating() {
         return rating;
     }
 
-    public void setRating(Rating rating) {
+    public void setRating(String rating) {
         this.rating = rating;
     }
 
@@ -179,6 +159,19 @@ public class Film {
 
     public void setLastUpdate(Timestamp lastUpdate) {
         this.lastUpdate = lastUpdate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Film film = (Film) o;
+        return filmId == film.filmId && languageId == film.languageId && rentalDuration == film.rentalDuration && Objects.equals(title, film.title) && Objects.equals(description, film.description) && Objects.equals(originalLanguageId, film.originalLanguageId) && Objects.equals(rentalRate, film.rentalRate) && Objects.equals(length, film.length) && Objects.equals(replacementCost, film.replacementCost) && Objects.equals(rating, film.rating) && Objects.equals(specialFeatures, film.specialFeatures) && Objects.equals(lastUpdate, film.lastUpdate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(filmId, title, description, languageId, originalLanguageId, rentalDuration, rentalRate, length, replacementCost, rating, specialFeatures, lastUpdate);
     }
 
     public List<Actor> getActors() {

@@ -1,44 +1,43 @@
 package be.quarkus.webapp.model;
 
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.Column;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 
 import java.sql.Timestamp;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Table(name = "actor", schema = "sakila")
 public class Actor {
-
-    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     @Column(name = "actor_id")
-    private Short actorId;
-
-    @Column(name = "first_name", nullable = false)
+    private short actorId;
+    @Basic
+    @Column(name = "first_name")
     private String firstName;
-
-    @Column(name = "last_name", nullable = false)
+    @Basic
+    @Column(name = "last_name")
     private String lastName;
-
-    @Column(name = "last_update", nullable = false)
-    private java.sql.Timestamp lastUpdate;
-
+    @Basic
+    @Column(name = "last_update")
+    private Timestamp lastUpdate;
     @ManyToMany(mappedBy = "actors")
     private Set<Film> films = new HashSet<>();
 
-    public Short getActorId() {
+    public short getActorId() {
         return actorId;
     }
 
-    public void setActorId(Short actorId) {
+    public void setActorId(short actorId) {
         this.actorId = actorId;
     }
 
@@ -64,6 +63,19 @@ public class Actor {
 
     public void setLastUpdate(Timestamp lastUpdate) {
         this.lastUpdate = lastUpdate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Actor actor = (Actor) o;
+        return actorId == actor.actorId && Objects.equals(firstName, actor.firstName) && Objects.equals(lastName, actor.lastName) && Objects.equals(lastUpdate, actor.lastUpdate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(actorId, firstName, lastName, lastUpdate);
     }
 
     public Set<Film> getFilms() {
