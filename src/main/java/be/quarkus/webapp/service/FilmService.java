@@ -13,7 +13,8 @@ public class FilmService {
     @Inject
     private FilmRepository repository;
 
-    public Optional<Film> getFilm(Short filmId) {
-        return repository.getFilm(filmId);
+    public String getFilm(Short filmId) {
+        Optional<Film> film = repository.getFilm(filmId);
+        return film.isPresent() ? film.get().getTitle() : "No film was found";
     }
 }
