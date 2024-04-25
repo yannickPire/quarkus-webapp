@@ -16,7 +16,7 @@ public class FilmResource {
     @GET
     @Path("/helloWorld")
     @Produces(MediaType.TEXT_PLAIN)
-    public String hello(){
+    public String hello() {
         return "Hello World";
     }
 
@@ -27,4 +27,10 @@ public class FilmResource {
         return service.getFilm(filmId);
     }
 
+    @GET
+    @Path("/pagedFilms/{page}/{minLength}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String paged(long page, short minLength) {
+        return service.retrievePagedFilm(page, minLength);
+    }
 }

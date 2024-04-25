@@ -1,6 +1,16 @@
 package be.quarkus.webapp.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Basic;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -12,8 +22,10 @@ import java.util.Objects;
 @Table(name = "film", schema = "sakila")
 public class Film {
 
-    public Film() {}
+    public Film() {
+    }
 
+    // Necessary for the projection
     public Film(short filmId, String title, short length) {
         this.filmId = filmId;
         this.title = title;
@@ -57,11 +69,11 @@ public class Film {
     @Basic
     @Column(name = "last_update")
     private Timestamp lastUpdate;
-    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "film_actor",
-            joinColumns = { @JoinColumn(name = "film_id") },
-            inverseJoinColumns = { @JoinColumn(name = "actor_id") }
+            joinColumns = {@JoinColumn(name = "film_id")},
+            inverseJoinColumns = {@JoinColumn(name = "actor_id")}
     )
     private List<Actor> actors = new ArrayList<>();
 
