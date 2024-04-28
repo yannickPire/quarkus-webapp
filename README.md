@@ -9,6 +9,12 @@ docker run --platform linux/amd64 -d --publish 3306:3306 --name sakila restsql/m
 ./mvnw compile quarkus:dev
 ```
 
+# Run the application in Quarkus DEV debug mode
+
+```dtd
+./mvnw compile quarkus:dev -Ddebug
+```
+
 # Known Issues
 
 This project is based on the following tutorial
