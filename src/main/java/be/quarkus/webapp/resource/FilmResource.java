@@ -33,4 +33,26 @@ public class FilmResource {
     public String paged(long page, short minLength) {
         return service.retrievePagedFilm(page, minLength);
     }
+
+    @GET
+    @Path("/pagedFilms/{startsWith}/{minLength}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String actor(String startsWith, short minLength) {
+        return service.getFilms(startsWith, minLength);
+    }
+
+    @GET
+    @Path("/pagedFilms/{minLength}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getFilms(short minLength) {
+        return service.getFilms(minLength);
+    }
+
+    @GET
+    @Path("/update/{minLength}/{rentalRate}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String paged(short minLength, Float rentalRate) {
+        service.updateRentalRate(minLength, rentalRate);
+        return service.getFilms(minLength);
+    }
 }
