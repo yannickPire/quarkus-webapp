@@ -1,18 +1,30 @@
 # Database setup
-```dtd
+```shell
 docker run --platform linux/amd64 -d --publish 3306:3306 --name sakila restsql/mysql-sakila
 ```
 
 # Run the application in Quarkus DEV mode
 
-```dtd
+```shell
 ./mvnw compile quarkus:dev
 ```
 
 # Run the application in Quarkus DEV debug mode
 
-```dtd
+```shell
 ./mvnw compile quarkus:dev -Ddebug
+```
+
+# Build a native executable
+
+```shell
+./mvnw package -Pnative
+```
+
+Or when using the Quarkus CLI 
+
+```shell
+quarkus build --native
 ```
 
 # Known Issues
